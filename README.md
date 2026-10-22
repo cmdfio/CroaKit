@@ -6,7 +6,7 @@ Un pied de page SwiftUI pour les apps des grenouilles francophiles : typographie
 
 ## Aperçu dans Seekzl
 
-La grenouille dans l’écran « À propos » de Seekzl :
+La grenouille dans l’écran « À propos » de Seekzl. Cliquer sur l’aperçu animé pour télécharger la vidéo MP4 à 60 images/s.
 
 <table>
   <tr>
@@ -18,8 +18,8 @@ La grenouille dans l’écran « À propos » de Seekzl :
       <img src="Documentation/Media/seekzl-preview.png" alt="Écran À propos de Seekzl avec la signature, la grenouille et la version de l’app" width="320">
     </td>
     <td align="center">
-      <video src="https://github.com/cmdfio/CroaKit/raw/refs/heads/main/Documentation/Media/seekzl-preview.mp4" poster="https://raw.githubusercontent.com/cmdfio/CroaKit/main/Documentation/Media/seekzl-preview.png" width="320" controls muted playsinline preload="metadata"></video>
-      <p><a href="Documentation/Media/seekzl-preview.mp4">Ouvrir la vidéo MP4</a></p>
+      <a href="https://github.com/cmdfio/CroaKit/raw/refs/heads/main/Documentation/Media/seekzl-preview.mp4"><img src="Documentation/Media/seekzl-preview.gif" alt="Aperçu animé dans Seekzl : la grenouille croasse puis bâille. Cliquer pour télécharger la vidéo." width="320"></a>
+      <p><a href="https://github.com/cmdfio/CroaKit/raw/refs/heads/main/Documentation/Media/seekzl-preview.mp4">Télécharger la vidéo MP4 · 60 images/s</a></p>
     </td>
   </tr>
 </table>
