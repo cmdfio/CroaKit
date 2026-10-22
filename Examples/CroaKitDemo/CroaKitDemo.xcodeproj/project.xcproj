@@ -1,0 +1,75 @@
+{
+  "default-configuration": "Release",
+  "configurations": [
+    "Debug",
+    "Release"
+  ],
+  "localizations": {
+    "development": "fr",
+    "supported": [
+      "fr"
+    ]
+  },
+  "packages": [
+    {
+      "kind": "local",
+      "path": "../.."
+    }
+  ],
+  "files": [
+    {
+      "path": "CroaKitDemoApp.swift",
+      "target-membership": [
+        "CroaKitDemo/compile-sources"
+      ]
+    },
+    {
+      "kind": "group",
+      "name": "Products",
+      "children": [
+        {
+          "path": "<PRODUCTS>/CroaKitDemo.app",
+          "id": "C20A00000000000000000001",
+          "type": "wrapper.application"
+        }
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "name": "CroaKitDemo",
+      "id": "C20A00000000000000000002",
+      "product": "Products/CroaKitDemo.app",
+      "product-type": "application",
+      "build-phases": [
+        "compile-sources",
+        "frameworks",
+        "resources"
+      ],
+      "package-product-members": [
+        {
+          "product-name": "CroaKit",
+          "build-phase": {
+            "build-phase": "frameworks"
+          }
+        }
+      ],
+      "build-settings": {
+        "PRODUCT_BUNDLE_IDENTIFIER": "org.grenouilles.CroaKitDemo",
+        "PRODUCT_NAME": "$(TARGET_NAME)",
+        "SDKROOT": "iphoneos",
+        "IPHONEOS_DEPLOYMENT_TARGET": "18.0",
+        "TARGETED_DEVICE_FAMILY": "1,2",
+        "SWIFT_VERSION": "6.0",
+        "GENERATE_INFOPLIST_FILE": "YES",
+        "INFOPLIST_KEY_CFBundleDisplayName": "CroaKit Démo",
+        "INFOPLIST_KEY_UIApplicationSceneManifest_Generation": "YES",
+        "INFOPLIST_KEY_UILaunchScreen_Generation": "YES",
+        "MARKETING_VERSION": "1.2.3",
+        "CURRENT_PROJECT_VERSION": "42",
+        "SWIFT_OPTIMIZATION_LEVEL[config=Debug]": "-Onone",
+        "CODE_SIGNING_ALLOWED": "NO"
+      }
+    }
+  ]
+}
