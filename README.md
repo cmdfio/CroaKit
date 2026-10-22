@@ -4,6 +4,26 @@ Un pied de page SwiftUI pour les apps des grenouilles francophiles : typographie
 
 **iOS 18+ · macOS 15+ · Swift 6 · aucune dépendance externe.**
 
+## Aperçu dans Seekzl
+
+La grenouille dans l’écran « À propos » de Seekzl :
+
+<table>
+  <tr>
+    <th>Capture</th>
+    <th>Vidéo · 13 secondes</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="Documentation/Media/seekzl-preview.png" alt="Écran À propos de Seekzl avec la signature, la grenouille et la version de l’app" width="320">
+    </td>
+    <td align="center">
+      <video src="https://github.com/cmdfio/CroaKit/raw/refs/heads/main/Documentation/Media/seekzl-preview.mp4" poster="https://raw.githubusercontent.com/cmdfio/CroaKit/main/Documentation/Media/seekzl-preview.png" width="320" controls muted playsinline preload="metadata"></video>
+      <p><a href="Documentation/Media/seekzl-preview.mp4">Ouvrir la vidéo MP4</a></p>
+    </td>
+  </tr>
+</table>
+
 ## Installation
 
 Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.0.0**, puis ajouter le produit **CroaKit** à la cible de l’app :
