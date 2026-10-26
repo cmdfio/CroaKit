@@ -4,7 +4,12 @@ import CroaKit
 @main
 struct CroaKitDemoApp: App {
     var body: some Scene {
-        WindowGroup { DemoView() }
+        WindowGroup {
+            TabView {
+                Tab("Signature", systemImage: "signature") { DemoView() }
+                Tab("Communauté", systemImage: "square.grid.2x2") { CroaKit.communityApps() }
+            }
+        }
     }
 }
 

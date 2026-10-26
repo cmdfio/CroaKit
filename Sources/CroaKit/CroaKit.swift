@@ -2,6 +2,15 @@ import SwiftUI
 
 /// A small signature for apps made by the Grenouilles Francophiles.
 public enum CroaKit {
+    /// Browse the apps approved by the ⌘+F community. Present in a sheet or a tab.
+    @MainActor
+    public static func communityApps(
+        excludingAppStoreID: String? = nil,
+        client: CroaCommunityClient = .init()
+    ) -> CroaCommunityApps {
+        CroaCommunityApps(excludingAppStoreID: excludingAppStoreID, client: client)
+    }
+
     /// Reads the host app's name, version and build unless explicitly provided.
     /// Add this directly to a SwiftUI `VStack`, `ScrollView` or about screen.
     @MainActor
