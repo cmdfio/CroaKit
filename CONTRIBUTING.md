@@ -23,7 +23,7 @@ Pour une évolution importante de l’API SwiftUI, décrire l’usage envisagé 
 
 1. Créer une branche à partir de `main`.
 2. Conserver la compatibilité iOS 18 / macOS 15 et Swift 6.
-3. Respecter la police système, Dynamic Type, VoiceOver et Réduire les animations.
+3. Conserver la police système par défaut et respecter le thème choisi, Dynamic Type, VoiceOver et Réduire les animations.
 4. Tester les changements de logique et les contrats réseau ; utiliser des réponses simulées pour les tests automatisés.
 5. Ouvrir une pull request qui explique le changement et sa vérification.
 

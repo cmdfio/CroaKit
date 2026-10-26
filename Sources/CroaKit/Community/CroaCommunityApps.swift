@@ -3,21 +3,23 @@ import SwiftUI
 /// A self-contained SwiftUI catalogue, ready to present in a sheet or a tab.
 public struct CroaCommunityApps: View {
     private let client: CroaCommunityClient
+    private let theme: CroaTheme
     @State private var model: CroaCommunityModel
     @State private var selectedApp: CroaCommunityApp?
     @State private var reloadID = 0
     @Environment(\.dismiss) private var dismiss
     @Environment(\.isPresented) private var isPresented
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.self) private var environment
 
-    public init(excludingAppStoreID: String? = nil, client: CroaCommunityClient = .init()) {
+    public init(excludingAppStoreID: String? = nil, client: CroaCommunityClient = .init(), theme: CroaTheme = .system) {
         self.client = client
+        self.theme = theme
         _model = State(initialValue: CroaCommunityModel(client: client, excludingAppStoreID: excludingAppStoreID))
     }
 
-    private var accent: Color {
-        colorScheme == .dark ? Color(red: 0.54, green: 0.87, blue: 0.69) : Color(red: 0.16, green: 0.43, blue: 0.29)
-    }
+    private var appearance: CroaResolvedTheme { theme.resolve(in: colorScheme) }
+    private var accent: Color { appearance.tint }
 
     public var body: some View {
         NavigationStack {
@@ -31,9 +33,11 @@ public struct CroaCommunityApps: View {
                 .frame(maxWidth: 900)
                 .frame(maxWidth: .infinity)
             }
+            .modifier(CroaCatalogueBackground(appearance: appearance))
             .refreshable { await model.load() }
             .navigationTitle("Les apps du collectif")
             #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $model.query, placement: .navigationBarDrawer(displayMode: .always), prompt: "App, développeur, catégorie…")
             #else
             .searchable(text: $model.query, prompt: "App, développeur, catégorie…")
@@ -51,10 +55,10 @@ public struct CroaCommunityApps: View {
             }
             .task(id: reloadID) { await model.load() }
             .sheet(item: $selectedApp) { app in
-                CroaCommunityDetail(app: app, client: client)
+                CroaCommunityDetail(app: app, client: client, theme: theme)
             }
         }
-        .tint(accent)
+        .modifier(CroaThemeStyle(appearance: appearance))
         .accessibilityIdentifier("croakit.community")
         #if os(macOS)
         .frame(minWidth: 480, minHeight: 560)
@@ -66,16 +70,16 @@ public struct CroaCommunityApps: View {
             HStack(alignment: .center, spacing: 20) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("LA COMMUNAUTÉ ⌘+F")
-                        .font(.system(.caption, weight: .semibold)).tracking(1.1).foregroundStyle(accent)
+                        .font(appearance.font.font(.caption, weight: .semibold)).tracking(1.1).foregroundStyle(accent)
                     Text("Des idées d’ici.\nDes apps pour vous.")
-                        .font(.system(.title2, design: .rounded, weight: .bold))
+                        .font(appearance.font.font(.title2, weight: .bold))
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer(minLength: 0)
                 CroaFrog(width: 48)
             }
             Text("Découvrez les créations de développeuses et développeurs francophones.")
-                .font(.subheadline).foregroundStyle(.secondary)
+                .font(appearance.font.font(.subheadline)).foregroundStyle(appearance.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
@@ -86,31 +90,37 @@ public struct CroaCommunityApps: View {
         } else if model.apps.isEmpty && model.failed {
             ContentUnavailableView {
                 Label("Le catalogue est indisponible", systemImage: "wifi.exclamationmark")
+                    .font(appearance.font.font(.title2, weight: .bold))
             } description: {
                 Text("Vérifiez votre connexion ou retrouvez les apps sur cmdf.io.")
+                    .font(appearance.font.font(.body)).foregroundStyle(appearance.secondary)
             } actions: {
-                Button("Réessayer") { reloadID += 1 }.buttonStyle(.borderedProminent)
+                Button("Réessayer") { reloadID += 1 }
+                    .foregroundStyle(appearance.textOnTint(in: environment))
+                    .buttonStyle(.borderedProminent)
                 Link("Voir sur cmdf.io", destination: CroaCommunityClient.catalogueURL)
             }
         } else if model.hasLoaded {
             VStack(alignment: .leading, spacing: 16) {
                 if model.failed {
                     Label("Actualisation indisponible. Les dernières apps chargées restent affichées.", systemImage: "wifi.exclamationmark")
-                        .font(.footnote).foregroundStyle(.secondary)
+                        .font(appearance.font.font(.footnote)).foregroundStyle(appearance.secondary)
                 }
                 if !model.apps.isEmpty { filters }
                 if model.filteredApps.isEmpty {
                     ContentUnavailableView {
                         Label(model.isFiltered ? "Aucune app ne correspond" : "Les premières apps arrivent", systemImage: "square.grid.2x2")
+                            .font(appearance.font.font(.title2, weight: .bold))
                     } description: {
                         Text(model.isFiltered ? "Essayez un autre nom ou une autre catégorie." : "Proposez votre application à la communauté.")
+                            .font(appearance.font.font(.body)).foregroundStyle(appearance.secondary)
                     } actions: {
                         if model.isFiltered { Button("Tout effacer") { model.resetFilters() } }
                     }
                 } else {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 280), spacing: 12)], spacing: 12) {
                         ForEach(model.filteredApps) { app in
-                            Button { selectedApp = app } label: { CroaCommunityRow(app: app) }
+                            Button { selectedApp = app } label: { CroaCommunityRow(app: app, appearance: appearance) }
                                 .buttonStyle(.plain)
                                 .accessibilityIdentifier("croakit.community.app.\(app.slug)")
                         }
@@ -124,7 +134,7 @@ public struct CroaCommunityApps: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("\(model.filteredApps.count) app\(model.filteredApps.count == 1 ? "" : "s")")
-                    .font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
+                    .font(appearance.font.font(.subheadline, weight: .semibold)).foregroundStyle(appearance.secondary)
                 Spacer()
                 Menu {
                     Picker("Catégorie", selection: $model.category) {
@@ -133,7 +143,7 @@ public struct CroaCommunityApps: View {
                     }
                 } label: {
                     Label(model.category.isEmpty ? "Catégories" : model.category, systemImage: "line.3.horizontal.decrease")
-                        .font(.subheadline).padding(.vertical, 8)
+                        .font(appearance.font.font(.subheadline)).padding(.vertical, 8)
                 }
             }
             ScrollView(.horizontal, showsIndicators: false) {
@@ -149,10 +159,10 @@ public struct CroaCommunityApps: View {
 
     private func tagButton(_ title: String, value: String) -> some View {
         Button { model.tag = value } label: {
-            Text(verbatim: title).font(.subheadline.weight(.medium))
+            Text(verbatim: title).font(appearance.font.font(.subheadline, weight: .medium))
                 .padding(.horizontal, 14).frame(minHeight: 44)
-                .foregroundStyle(model.tag == value ? accent : .secondary)
-                .background(model.tag == value ? accent.opacity(0.12) : Color.secondary.opacity(0.07), in: Capsule())
+                .foregroundStyle(model.tag == value ? accent : appearance.secondary)
+                .background(model.tag == value ? accent.opacity(0.12) : appearance.surface, in: Capsule())
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(model.tag == value ? .isSelected : [])
@@ -161,12 +171,12 @@ public struct CroaCommunityApps: View {
     private var submission: some View {
         VStack(alignment: .leading, spacing: 10) {
             Divider().padding(.bottom, 6)
-            Text("Votre app a sa place ici.").font(.headline)
+            Text("Votre app a sa place ici.").font(appearance.font.font(.headline))
             Text("Proposez-la sur cmdf.io. L’équipe du collectif la valide avant son apparition dans le catalogue.")
-                .font(.subheadline).foregroundStyle(.secondary)
+                .font(appearance.font.font(.subheadline)).foregroundStyle(appearance.secondary)
             Link(destination: CroaCommunityClient.submissionURL) {
                 Label("Ajouter mon application", systemImage: "plus")
-                    .font(.subheadline.weight(.semibold)).padding(.vertical, 8)
+                    .font(appearance.font.font(.subheadline, weight: .semibold)).padding(.vertical, 8)
             }
             .accessibilityIdentifier("croakit.community.submit")
         }
@@ -176,22 +186,23 @@ public struct CroaCommunityApps: View {
 
 struct CroaCommunityRow: View {
     let app: CroaCommunityApp
+    let appearance: CroaResolvedTheme
     var body: some View {
         HStack(spacing: 14) {
-            CroaCommunityIcon(app: app, size: 60)
+            CroaCommunityIcon(app: app, size: 60, appearance: appearance)
             VStack(alignment: .leading, spacing: 4) {
-                Text(verbatim: app.name).font(.headline).foregroundStyle(.primary).lineLimit(2)
+                Text(verbatim: app.name).font(appearance.font.font(.headline)).foregroundStyle(appearance.foreground).lineLimit(2)
                 if let developer = app.developer {
-                    Text(verbatim: developer).font(.caption).foregroundStyle(.secondary).lineLimit(2)
+                    Text(verbatim: developer).font(appearance.font.font(.caption)).foregroundStyle(appearance.secondary).lineLimit(2)
                 }
-                Text(verbatim: app.category).font(.caption).foregroundStyle(.secondary)
+                Text(verbatim: app.category).font(appearance.font.font(.caption)).foregroundStyle(appearance.secondary)
             }
             Spacer(minLength: 0)
-            Image(systemName: "chevron.right").font(.caption.weight(.semibold)).foregroundStyle(.tertiary)
+            Image(systemName: "chevron.right").font(appearance.font.font(.caption, weight: .semibold)).foregroundStyle(appearance.secondary.opacity(0.6))
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.35), in: RoundedRectangle(cornerRadius: 20))
+        .background(appearance.surface, in: RoundedRectangle(cornerRadius: 20))
         .contentShape(RoundedRectangle(cornerRadius: 20))
         .accessibilityElement(children: .combine)
     }
@@ -200,14 +211,15 @@ struct CroaCommunityRow: View {
 struct CroaCommunityIcon: View {
     let app: CroaCommunityApp
     let size: CGFloat
+    let appearance: CroaResolvedTheme
     var body: some View {
         AsyncImage(url: app.artworkURL) { image in
             image.resizable().scaledToFit()
         } placeholder: {
-            Image(systemName: "app.dashed").resizable().scaledToFit().padding(size * 0.2).foregroundStyle(.secondary)
+            Image(systemName: "app.dashed").resizable().scaledToFit().padding(size * 0.2).foregroundStyle(appearance.secondary)
         }
         .frame(width: size, height: size)
-        .background(.quaternary, in: RoundedRectangle(cornerRadius: size * 0.22))
+        .background(appearance.surface, in: RoundedRectangle(cornerRadius: size * 0.22))
         .clipShape(RoundedRectangle(cornerRadius: size * 0.22))
         .accessibilityHidden(true)
     }

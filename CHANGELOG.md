@@ -1,5 +1,14 @@
 # Changements
 
+## 1.2.0
+
+- Paramètre `theme` commun à la signature, à la galerie et aux fiches d’apps.
+- Enum `CroaTheme` : `.system`, `.pond`, `.paper` et `.custom(...)`.
+- Fonds transparents, unis ou en dégradé ; couleurs d’accent et de texte personnalisables.
+- Enum `CroaFont` : système, arrondie, serif, monospace ou police personnalisée avec Dynamic Type.
+- Sélecteur de thèmes dans la démo et exemples d’intégration dans le README.
+- Les appels existants conservent le thème système par défaut.
+
 ## 1.1.0
 
 - Galerie SwiftUI des apps du collectif avec `CroaKit.communityApps()`.

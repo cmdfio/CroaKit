@@ -6,9 +6,10 @@ public enum CroaKit {
     @MainActor
     public static func communityApps(
         excludingAppStoreID: String? = nil,
-        client: CroaCommunityClient = .init()
+        client: CroaCommunityClient = .init(),
+        theme: CroaTheme = .system
     ) -> CroaCommunityApps {
-        CroaCommunityApps(excludingAppStoreID: excludingAppStoreID, client: client)
+        CroaCommunityApps(excludingAppStoreID: excludingAppStoreID, client: client, theme: theme)
     }
 
     /// Reads the host app's name, version and build unless explicitly provided.
@@ -20,9 +21,10 @@ public enum CroaKit {
         version: String? = nil,
         build: String? = nil,
         frogWidth: CGFloat = 36.96,
-        animationsEnabled: Bool = true
+        animationsEnabled: Bool = true,
+        theme: CroaTheme = .system
     ) -> CroaFooter {
         CroaFooter(firstName: firstName, appName: appName, version: version,
-                   build: build, frogWidth: frogWidth, animationsEnabled: animationsEnabled)
+                   build: build, frogWidth: frogWidth, animationsEnabled: animationsEnabled, theme: theme)
     }
 }

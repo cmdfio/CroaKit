@@ -26,7 +26,7 @@ La grenouille dans l’écran « À propos » de Seekzl. Cliquer sur l’aperçu
 
 ## Installation
 
-Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.1.0**, puis ajouter le produit **CroaKit** à la cible de l’app :
+Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.2.0**, puis ajouter le produit **CroaKit** à la cible de l’app :
 
 ```text
 https://github.com/cmdfio/CroaKit.git
@@ -36,7 +36,7 @@ Dans un autre package Swift, ajouter la dépendance et le produit à sa cible :
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/cmdfio/CroaKit.git", from: "1.1.0")
+    .package(url: "https://github.com/cmdfio/CroaKit.git", from: "1.2.0")
 ],
 targets: [
     .target(
@@ -93,6 +93,73 @@ CroaKit.footer(
 Tous les paramètres sauf `firstName` sont facultatifs. `frogWidth` vaut `36.96` points par défaut ; la zone tactile conserve une taille minimale de 44 points. Un espace au-dessus de la grenouille permet le saut sans recouvrir la signature. La largeur du texte est limitée à 360 points, la hauteur s’adapte aux retours à la ligne et à Dynamic Type.
 
 `CroaFooter(...)` offre exactement les mêmes paramètres si vous préférez une vue nommée à la méthode `CroaKit.footer(...)`.
+
+## Personnaliser l’apparence
+
+Le paramètre `theme` est commun à la signature et à la galerie. Le même thème est automatiquement appliqué aux fiches d’apps :
+
+```swift
+CroaKit.footer(firstName: "Clément", theme: .pond)
+CroaKit.communityApps(theme: .pond)
+```
+
+`CroaTheme` est une enum avec trois styles prêts à l’emploi et une option sur mesure :
+
+| Thème | Fond | Police | Apparence |
+| --- | --- | --- | --- |
+| `.system` (défaut) | Natif ; signature transparente | Système | Suit le mode clair/sombre |
+| `.pond` | Vert étang | Système arrondie | Sombre, texte clair, accent menthe |
+| `.paper` | Crème | Système à empattements | Claire, texte et accent bleu encre |
+| `.custom(...)` | À choisir | À choisir | Couleurs et mode à choisir |
+
+<table>
+  <tr><th>Étang · .pond</th><th>Papier · .paper</th><th>Sur mesure · .custom</th></tr>
+  <tr>
+    <td><img src="Documentation/Media/theme-pond.png" alt="Thème Étang : fond vert sombre et police arrondie" width="240"></td>
+    <td><img src="Documentation/Media/theme-paper.png" alt="Thème Papier : fond crème et police à empattements" width="240"></td>
+    <td><img src="Documentation/Media/theme-custom.png" alt="Thème sur mesure : dégradé indigo et police Avenir Next" width="240"></td>
+  </tr>
+</table>
+
+```swift
+let theme: CroaTheme = .custom(
+    background: .color(.indigo),
+    font: .rounded,
+    tint: .mint,
+    foreground: .white,
+    secondaryForeground: .white.opacity(0.8),
+    colorScheme: .dark
+)
+
+CroaKit.communityApps(theme: theme)
+CroaKit.footer(firstName: "Camille", theme: theme)
+```
+
+Tous les arguments de `.custom(...)` sont facultatifs :
+
+- **`background: CroaBackground`** : `.automatic`, `.transparent`, `.color(Color)` ou `.gradient(LinearGradient)`. Le fond de la signature couvre ses propres dimensions ; celui de la galerie et des fiches couvre leur contenu et, sur iOS, la barre de navigation. Le style ne modifie pas la barre d’onglets de l’app hôte.
+- **`font: CroaFont`** : `.system`, `.rounded`, `.serif`, `.monospaced` ou `.custom("NomPostScript")`. Une police personnalisée doit être disponible sur le système ou enregistrée par l’app hôte. Les tailles suivent les styles sémantiques et Dynamic Type, avec [l’API SwiftUI `Font.custom(_:size:relativeTo:)`](https://developer.apple.com/documentation/swiftui/font/custom(_:size:relativeto:)). Les contrôles natifs, notamment le titre de navigation et la recherche, conservent la typographie prévue par le système.
+- **`tint`, `foreground`, `secondaryForeground`** : couleurs des accents, du texte principal et du texte secondaire. Les cartes utilisent une version atténuée de la couleur principale.
+- **`colorScheme`** : `nil` suit le système ; `.light` ou `.dark` adapte les contrôles au fond choisi, uniquement dans le composant. Pour un fond sombre fixe, associer `.dark` à des textes clairs ; pour des couleurs adaptatives provenant du catalogue d’assets, laisser `nil`.
+
+Exemple avec dégradé et police fournie par l’app :
+
+```swift
+CroaKit.communityApps(theme: .custom(
+    background: .gradient(LinearGradient(
+        colors: [.indigo, .black],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )),
+    font: .custom("AvenirNext-Regular"),
+    tint: .mint,
+    foreground: .white,
+    secondaryForeground: .white.opacity(0.8),
+    colorScheme: .dark
+))
+```
+
+Les appels existants restent valides : sans `theme`, CroaKit utilise `.system`. Les thèmes n’altèrent pas les couleurs de la grenouille.
 
 ## Les apps de la communauté
 
@@ -175,7 +242,7 @@ La vue fonctionne aussi dans un `VStack` sans `ScrollView`. Éviter d’applique
 
 ## Démonstration et vérification
 
-Ouvrir `Examples/CroaKitDemo/CroaKitDemo.xcodeproj`, choisir le schéma **CroaKitDemo** et un simulateur iOS. L’onglet **Signature** présente `CroaKit.footer(firstName: "Clément", animationsEnabled: animations)` avec les métadonnées de la cible ; l’onglet **Communauté** présente `CroaKit.communityApps()`.
+Ouvrir `Examples/CroaKitDemo/CroaKitDemo.xcodeproj`, choisir le schéma **CroaKitDemo** et un simulateur iOS. L’onglet **Signature** présente `CroaKit.footer(firstName: "Clément", animationsEnabled: animations)` avec les métadonnées de la cible ; l’onglet **Communauté** présente `CroaKit.communityApps()`. Le sélecteur de thème de la signature permet de comparer Système, Étang, Papier et Sur mesure dans les deux onglets.
 
 Les ressources graphiques et Metal doivent être compilées par Xcode / `xcodebuild`, qui produit le catalogue d’assets et `default.metallib` dans le bundle du package. Un `swift build` seul ne remplace pas cette compilation des ressources Apple.
 
@@ -190,6 +257,7 @@ Les tests vérifient les métadonnées, les illustrations, la bibliothèque Meta
 ## Contenu
 
 - `CroaKit.swift`, `CroaFooter.swift`, `CroaFrog.swift` : API publique.
+- `CroaTheme.swift` : thèmes, fonds et polices personnalisables.
 - `Animation/` : interpolation des formes et mouvements SwiftUI.
 - `Community/` : galerie SwiftUI, fiches, modèles et client du catalogue cmdf.io.
 - `Resources/Art.xcassets` : illustrations vectorielles.
