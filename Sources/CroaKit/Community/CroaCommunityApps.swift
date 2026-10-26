@@ -166,7 +166,7 @@ public struct CroaCommunityApps: View {
         VStack(alignment: .leading, spacing: 10) {
             Divider().padding(.bottom, 6)
             Text("Votre app a sa place ici.").font(appearance.font.font(.headline))
-            Text("Proposez-la sur cmdf.io. L’équipe du collectif la valide avant son apparition dans le catalogue.")
+            Text("Intégrez CroaKit à votre app, puis proposez-la sur cmdf.io. Le collectif vérifie l’intégration avant d’activer son affichage ici.")
                 .font(appearance.font.font(.subheadline)).foregroundStyle(appearance.secondary)
             Link(destination: CroaCommunityClient.submissionURL) {
                 Label("Ajouter mon application", systemImage: "plus")

@@ -1,6 +1,6 @@
 import Foundation
 
-/// An approved app from the public cmdf.io catalogue.
+/// An approved app explicitly enabled for CroaKit by the cmdf.io team.
 public struct CroaCommunityApp: Decodable, Identifiable, Hashable, Sendable {
     public let id: String
     public let appStoreID: String

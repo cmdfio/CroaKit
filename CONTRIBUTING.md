@@ -6,12 +6,12 @@ Merci de contribuer aux outils du collectif ⌘+F.
 
 L’ajout se fait sur **[cmdf.io → Proposer mon app](https://cmdf.io/fr/apps#proposer)**, pas par une pull request dans CroaKit.
 
-1. Coller le lien App Store de votre application.
-2. Renseigner votre nom et votre adresse e-mail pour le suivi de la proposition.
-3. Ajouter, si vous le souhaitez, une présentation, des liens et des captures.
-4. Envoyer la proposition. L’équipe du collectif la valide avant publication.
+1. Intégrer CroaKit dans votre application avant de demander son affichage dans le catalogue CroaKit.
+2. Coller le lien App Store de votre application sur cmdf.io.
+3. Renseigner votre nom, votre adresse e-mail et signaler l’intégration de CroaKit dans la note à l’équipe.
+4. Ajouter, si vous le souhaitez, une présentation, des liens et des captures, puis envoyer la proposition.
 
-Une fois approuvée, votre app est incluse dans le catalogue cmdf.io et apparaît dans les apps qui l’affichent avec CroaKit lors de leur prochaine actualisation. Le cache du service peut retarder sa visibilité. Ne pas ajouter de liste d’apps en dur dans le package.
+La validation sur le wall cmdf.io ne déclenche pas automatiquement l’affichage dans CroaKit. Après vérification de l’intégration, l’équipe doit activer **Afficher dans CroaKit** dans l’admin. L’app doit être à la fois approuvée et activée ; le cache du service peut retarder sa visibilité de quelques minutes. Masquer une app dans CroaKit conserve sa publication sur cmdf.io. Ne pas ajouter de liste d’apps en dur dans le package.
 
 ## Signaler un problème ou proposer une amélioration
 

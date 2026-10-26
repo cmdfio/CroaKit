@@ -2,7 +2,8 @@ import SwiftUI
 
 /// A small signature for apps made by the Grenouilles Francophiles.
 public enum CroaKit {
-    /// Browse the apps approved by the ⌘+F community. Present in a sheet or a tab.
+    /// Browse apps approved and explicitly enabled for CroaKit by ⌘+F.
+    /// Present in a sheet or a tab.
     @MainActor
     public static func communityApps(
         excludingAppStoreID: String? = nil,

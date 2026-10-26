@@ -1,5 +1,11 @@
 # Changements
 
+## 1.2.2
+
+- Texte d’ajout d’app et documentation : l’intégration de CroaKit est requise pour apparaître dans son catalogue.
+- Activation manuelle par le collectif, distincte de la publication sur le wall cmdf.io.
+- Le filtrage est appliqué par l’API et bénéficie aussi aux versions précédentes du package.
+
 ## 1.2.1
 
 - En-tête du catalogue compact : suppression du grand slogan et du paragraphe d’introduction.
