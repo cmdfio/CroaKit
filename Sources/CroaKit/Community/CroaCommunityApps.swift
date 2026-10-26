@@ -11,6 +11,7 @@ public struct CroaCommunityApps: View {
     @Environment(\.isPresented) private var isPresented
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.self) private var environment
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     public init(excludingAppStoreID: String? = nil, client: CroaCommunityClient = .init(), theme: CroaTheme = .system) {
         self.client = client
@@ -24,12 +25,12 @@ public struct CroaCommunityApps: View {
     public var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    introduction
+                VStack(alignment: .leading, spacing: 20) {
                     catalogue
                     submission
                 }
-                .padding(20)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
                 .frame(maxWidth: 900)
                 .frame(maxWidth: .infinity)
             }
@@ -65,25 +66,6 @@ public struct CroaCommunityApps: View {
         #endif
     }
 
-    private var introduction: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .center, spacing: 20) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("LA COMMUNAUTÉ ⌘+F")
-                        .font(appearance.font.font(.caption, weight: .semibold)).tracking(1.1).foregroundStyle(accent)
-                    Text("Des idées d’ici.\nDes apps pour vous.")
-                        .font(appearance.font.font(.title2, weight: .bold))
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                Spacer(minLength: 0)
-                CroaFrog(width: 48)
-            }
-            Text("Découvrez les créations de développeuses et développeurs francophones.")
-                .font(appearance.font.font(.subheadline)).foregroundStyle(appearance.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
     @ViewBuilder private var catalogue: some View {
         if model.apps.isEmpty && model.isLoading {
             ProgressView("Chargement des apps…").frame(maxWidth: .infinity).padding(.vertical, 40)
@@ -101,7 +83,7 @@ public struct CroaCommunityApps: View {
                 Link("Voir sur cmdf.io", destination: CroaCommunityClient.catalogueURL)
             }
         } else if model.hasLoaded {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 12) {
                 if model.failed {
                     Label("Actualisation indisponible. Les dernières apps chargées restent affichées.", systemImage: "wifi.exclamationmark")
                         .font(appearance.font.font(.footnote)).foregroundStyle(appearance.secondary)
@@ -131,11 +113,23 @@ public struct CroaCommunityApps: View {
     }
 
     private var filters: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("\(model.filteredApps.count) app\(model.filteredApps.count == 1 ? "" : "s")")
-                    .font(appearance.font.font(.subheadline, weight: .semibold)).foregroundStyle(appearance.secondary)
-                Spacer()
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+            : AnyLayout(HStackLayout(spacing: 10))
+
+        return VStack(alignment: .leading, spacing: 8) {
+            layout {
+                HStack(spacing: 10) {
+                    CroaFrog(width: 26)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Communauté ⌘+F")
+                            .font(appearance.font.font(.caption, weight: .semibold)).foregroundStyle(accent)
+                        Text("\(model.filteredApps.count) app\(model.filteredApps.count == 1 ? "" : "s")")
+                            .font(appearance.font.font(.caption)).foregroundStyle(appearance.secondary)
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 Menu {
                     Picker("Catégorie", selection: $model.category) {
                         Text("Toutes les catégories").tag("")

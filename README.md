@@ -26,7 +26,7 @@ La grenouille dans l’écran « À propos » de Seekzl. Cliquer sur l’aperçu
 
 ## Installation
 
-Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.2.0**, puis ajouter le produit **CroaKit** à la cible de l’app :
+Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.2.1**, puis ajouter le produit **CroaKit** à la cible de l’app :
 
 ```text
 https://github.com/cmdfio/CroaKit.git
@@ -36,7 +36,7 @@ Dans un autre package Swift, ajouter la dépendance et le produit à sa cible :
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/cmdfio/CroaKit.git", from: "1.2.0")
+    .package(url: "https://github.com/cmdfio/CroaKit.git", from: "1.2.1")
 ],
 targets: [
     .target(
@@ -197,6 +197,7 @@ struct AboutView: View {
 `excludingAppStoreID` est facultatif : il permet de masquer l’app hôte dans les suggestions. C’est l’identifiant numérique de sa fiche App Store, pas son bundle ID. `CroaCommunityApps(...)` expose les mêmes paramètres que la méthode.
 
 - Recherche par nom, développeur ou catégorie, sans distinction de casse ou d’accents.
+- En-tête compact : petite grenouille, mention du collectif, compteur et catégories sur une même ligne, au-dessus des filtres.
 - Catégories et filtres du collectif : Compatible Duo, Build Challenge, Fondateurs, lorsqu’ils sont présents.
 - Fiches avec présentation, captures, prix et note lorsqu’ils sont disponibles, puis lien vers l’App Store.
 - Actualisation, états de chargement, catalogue vide et nouvelle tentative après une erreur. Une actualisation échouée conserve les apps déjà affichées.

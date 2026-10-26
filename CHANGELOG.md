@@ -1,5 +1,11 @@
 # Changements
 
+## 1.2.1
+
+- En-tête du catalogue compact : suppression du grand slogan et du paragraphe d’introduction.
+- Petite grenouille et mention du collectif intégrées à la ligne du compteur et des catégories.
+- Espacements réduits pour afficher les premières apps plus haut, sans réduire les zones tactiles des filtres.
+
 ## 1.2.0
 
 - Paramètre `theme` commun à la signature, à la galerie et aux fiches d’apps.
