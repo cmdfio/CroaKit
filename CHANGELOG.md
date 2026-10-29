@@ -1,5 +1,11 @@
 # Changements
 
+## 1.4.0
+
+- Carte App Store native (`SKOverlay`) affichée automatiquement à l’ouverture d’une fiche sur iPhone et iPad pour installer l’app sans quitter la présentation.
+- Carte refermable, masquée à la fermeture de la fiche et non réaffichée lors d’une actualisation.
+- Lien App Store conservé en secours et sur macOS ; seuls les identifiants App Store valides sont transmis à StoreKit.
+
 ## 1.3.0
 
 - Lien facultatif **Les apps du collectif** dans le footer, activé avec `showsCommunityLink: true` et masqué par défaut.

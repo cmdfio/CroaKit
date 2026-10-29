@@ -21,6 +21,14 @@ public struct CroaCommunityApp: Decodable, Identifiable, Hashable, Sendable {
         URL(string: "https://cmdf.io/fr/apps")!.appendingPathComponent(slug)
     }
 
+    /// StoreKit expects the numeric App Store identifier, never a bundle ID or a URL.
+    var storeOverlayID: String? {
+        guard appStoreURL != nil, !appStoreID.isEmpty,
+              appStoreID.utf8.allSatisfy({ (48...57).contains($0) }),
+              let value = UInt64(appStoreID), value > 0 else { return nil }
+        return appStoreID
+    }
+
     enum CodingKeys: String, CodingKey {
         case id, slug, name, developer, genre, tags, artworkUrl, url
         case appStoreID = "appStoreId"

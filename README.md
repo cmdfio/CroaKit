@@ -26,7 +26,7 @@ La grenouille dans l’écran « À propos » de Seekzl. Cliquer sur l’aperçu
 
 ## Installation
 
-Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.3.0**, puis ajouter le produit **CroaKit** à la cible de l’app :
+Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.4.0**, puis ajouter le produit **CroaKit** à la cible de l’app :
 
 ```text
 https://github.com/cmdfio/CroaKit.git
@@ -36,7 +36,7 @@ Dans un autre package Swift, ajouter la dépendance et le produit à sa cible :
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/cmdfio/CroaKit.git", from: "1.3.0")
+    .package(url: "https://github.com/cmdfio/CroaKit.git", from: "1.4.0")
 ],
 targets: [
     .target(
@@ -230,6 +230,14 @@ struct AboutView: View {
 - Fiches avec présentation, captures, prix et note lorsqu’ils sont disponibles, puis lien vers l’App Store.
 - Actualisation, états de chargement, catalogue vide et nouvelle tentative après une erreur. Une actualisation échouée conserve les apps déjà affichées.
 - Mise en page adaptative, mode sombre, Dynamic Type et VoiceOver.
+
+### Télécharger depuis la fiche
+
+Sur iPhone et iPad, ouvrir une fiche présente automatiquement la petite carte native de l’App Store en bas de l’écran, grâce à [StoreKit `SKOverlay`](https://developer.apple.com/documentation/storekit/skoverlay). Elle permet d’installer l’app directement tout en conservant la présentation CroaKit à l’écran. Aucun paramètre supplémentaire n’est nécessaire.
+
+La carte peut être fermée par l’utilisateur et disparaît en quittant la fiche. Une actualisation de la présentation ne la rouvre pas ; ouvrir une autre fiche présente la carte de cette autre app. Le lien **Voir sur l’App Store** reste accessible, y compris si StoreKit ne peut pas charger la carte. Sur macOS, ce lien ouvre l’App Store, car `SKOverlay` n’y est pas disponible.
+
+Apple contrôle l’apparence, le prix, la disponibilité, le bouton d’installation et la confirmation du téléchargement. CroaKit ne déclenche aucun achat ni téléchargement automatiquement et ne configure aucun suivi publicitaire. La carte contacte les services Apple uniquement à l’ouverture d’une fiche. Le parcours d’installation doit être vérifié sur un appareil réel disposant de l’App Store ; le simulateur ne valide pas un téléchargement réel.
 
 ### Connexion à cmdf.io
 

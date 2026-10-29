@@ -72,6 +72,7 @@ struct CroaCommunityDetail: View {
             }
         }
         .modifier(CroaThemeStyle(appearance: appearance))
+        .modifier(CroaAppStoreOverlay(app: app))
         #if os(macOS)
         .frame(minWidth: 480, minHeight: 560)
         #endif

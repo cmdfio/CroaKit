@@ -98,9 +98,26 @@ struct CroaCommunityTests {
         let app = try #require(JSONDecoder().decode([CroaCommunityApp].self, from: Data(invalid.utf8)).first)
         #expect(app.artworkURL == nil)
         #expect(app.appStoreURL == nil)
+        #expect(app.storeOverlayID == nil)
         CommunityURLProtocol.state.set(body: "[]")
         await #expect(throws: CroaCommunityError.invalidResponse) { try await makeClient().detail(for: app) }
         #expect(CommunityURLProtocol.state.recorded().isEmpty)
+    }
+
+    @Test(arguments: ["", "0", "-123", "com.example.app", "https://apps.apple.com/app/id123", "１２３", "123 "])
+    func invalidStoreIdentifiersDoNotPresentAnInstallCard(_ identifier: String) throws {
+        let payload: [String: String] = [
+            "id": "app", "appStoreId": identifier, "slug": "app", "name": "App",
+            "url": "https://apps.apple.com/app/id123"
+        ]
+        let app = try JSONDecoder().decode(CroaCommunityApp.self, from: JSONSerialization.data(withJSONObject: payload))
+        #expect(app.storeOverlayID == nil)
+        #expect(app.appStoreURL != nil)
+    }
+
+    @Test func installCardUsesTheSelectedAppsStoreIdentifier() throws {
+        let apps = try JSONDecoder().decode([CroaCommunityApp].self, from: Data(catalogueFixture.utf8))
+        #expect(apps.map(\.storeOverlayID) == ["123", "456"])
     }
 
     @Test func detailContractUsesTheSelectedSlugAndFiltersScreenshots() async throws {
