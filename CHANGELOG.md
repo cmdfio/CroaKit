@@ -1,5 +1,12 @@
 # Changements
 
+## 1.3.0
+
+- Lien facultatif **Les apps du collectif** dans le footer, activé avec `showsCommunityLink: true` et masqué par défaut.
+- Ouverture de la galerie en feuille avec le thème du footer et l’option `excludingAppStoreID` pour masquer l’app hôte.
+- La documentation recommande toujours un vrai lien dédié dans la navigation ou les réglages ; le lien du footer reste un accès complémentaire.
+- Réglage dans la démo pour comparer le footer avec et sans le lien.
+
 ## 1.2.2
 
 - Texte d’ajout d’app et documentation : l’intégration de CroaKit est requise pour apparaître dans son catalogue.

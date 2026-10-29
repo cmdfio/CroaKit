@@ -18,6 +18,7 @@ struct CroaKitDemoApp: App {
 private struct DemoView: View {
     @Binding var theme: DemoTheme
     @State private var animations = true
+    @State private var showsCommunityLink = false
 
     var body: some View {
         VStack(spacing: 32) {
@@ -28,10 +29,14 @@ private struct DemoView: View {
                 ForEach(DemoTheme.allCases) { Text($0.rawValue).tag($0) }
             }
             .pickerStyle(.menu)
-            CroaKit.footer(firstName: "Clément", animationsEnabled: animations, theme: theme.value)
+            CroaKit.footer(firstName: "Clément", animationsEnabled: animations, theme: theme.value,
+                           showsCommunityLink: showsCommunityLink)
             Spacer(minLength: 24)
-            Toggle("Animations", isOn: $animations)
-                .frame(maxWidth: 300)
+            VStack(spacing: 12) {
+                Toggle("Animations", isOn: $animations)
+                Toggle("Lien vers la communauté", isOn: $showsCommunityLink)
+            }
+            .frame(maxWidth: 300)
             Text("Touchez la grenouille pour un clin d’œil.\nMaintenez pour la faire sauter.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)

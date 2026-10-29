@@ -26,7 +26,7 @@ La grenouille dans l’écran « À propos » de Seekzl. Cliquer sur l’aperçu
 
 ## Installation
 
-Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.2.2**, puis ajouter le produit **CroaKit** à la cible de l’app :
+Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.3.0**, puis ajouter le produit **CroaKit** à la cible de l’app :
 
 ```text
 https://github.com/cmdfio/CroaKit.git
@@ -36,7 +36,7 @@ Dans un autre package Swift, ajouter la dépendance et le produit à sa cible :
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/cmdfio/CroaKit.git", from: "1.2.2")
+    .package(url: "https://github.com/cmdfio/CroaKit.git", from: "1.3.0")
 ],
 targets: [
     .target(
@@ -93,6 +93,34 @@ CroaKit.footer(
 Tous les paramètres sauf `firstName` sont facultatifs. `frogWidth` vaut `36.96` points par défaut ; la zone tactile conserve une taille minimale de 44 points. Un espace au-dessus de la grenouille permet le saut sans recouvrir la signature. La largeur du texte est limitée à 360 points, la hauteur s’adapte aux retours à la ligne et à Dynamic Type.
 
 `CroaFooter(...)` offre exactement les mêmes paramètres si vous préférez une vue nommée à la méthode `CroaKit.footer(...)`.
+
+### Lien facultatif vers les apps de la communauté
+
+Le footer peut afficher un lien discret **Les apps du collectif**, sous la version :
+
+```swift
+CroaKit.footer(
+    firstName: "Clément",
+    showsCommunityLink: true
+)
+```
+
+`showsCommunityLink` vaut `false` par défaut. Le lien ouvre `CroaKit.communityApps()` dans une feuille, avec le même thème que le footer et un bouton **Fermer**. Aucun appel réseau n’a lieu avant l’ouverture de la galerie.
+
+**Un vrai lien dédié dans la navigation ou les réglages de votre app est toujours préférable.** Il rend les apps de la communauté plus faciles à découvrir. Le lien du footer est un accès complémentaire, pas un remplacement de cet accès principal. Voir l’[exemple d’accès dédié](#les-apps-de-la-communauté) ci-dessous.
+
+Pour appliquer un thème et masquer l’app hôte dans cette galerie :
+
+```swift
+CroaKit.footer(
+    firstName: "Clément",
+    theme: .pond,
+    showsCommunityLink: true,
+    excludingAppStoreID: "1234567890"
+)
+```
+
+`excludingAppStoreID` est l’identifiant numérique de la fiche App Store de l’app. Il ne s’applique qu’à la galerie ouverte depuis ce footer ; il ne change pas la signature.
 
 ## Personnaliser l’apparence
 
@@ -207,7 +235,7 @@ struct AboutView: View {
 
 Le client utilise `GET https://cmdf.io/api/apps` pour le catalogue et `GET https://cmdf.io/api/apps/{slug}` à l’ouverture d’une fiche. Le catalogue inclut uniquement les apps approuvées **et activées manuellement pour CroaKit**, après vérification de leur intégration du package. Il reprend l’ordre défini par le collectif. Aucune clé d’API ni compte n’est nécessaire. La publication sur le wall cmdf.io reste indépendante.
 
-Les requêtes commencent quand la galerie est affichée. Les icônes et captures sont chargées depuis les URL publiques renvoyées par le service. Le cache HTTP du serveur est respecté ; la recherche et les filtres restent locaux. CroaKit n’ajoute aucune télémétrie et ne transmet pas la recherche au serveur. **Le pied de page et la grenouille seuls ne font aucun appel réseau.**
+Les requêtes commencent quand la galerie est affichée. Les icônes et captures sont chargées depuis les URL publiques renvoyées par le service. Le cache HTTP du serveur est respecté ; la recherche et les filtres restent locaux. CroaKit n’ajoute aucune télémétrie et ne transmet pas la recherche au serveur. **Le pied de page et la grenouille seuls ne font aucun appel réseau**, même lorsque le lien facultatif est visible : il faut ouvrir la galerie pour déclencher son chargement.
 
 Le client peut aussi être utilisé sans l’interface :
 
@@ -245,7 +273,7 @@ La vue fonctionne aussi dans un `VStack` sans `ScrollView`. Éviter d’applique
 
 ## Démonstration et vérification
 
-Ouvrir `Examples/CroaKitDemo/CroaKitDemo.xcodeproj`, choisir le schéma **CroaKitDemo** et un simulateur iOS. L’onglet **Signature** présente `CroaKit.footer(firstName: "Clément", animationsEnabled: animations)` avec les métadonnées de la cible ; l’onglet **Communauté** présente `CroaKit.communityApps()`. Le sélecteur de thème de la signature permet de comparer Système, Étang, Papier et Sur mesure dans les deux onglets.
+Ouvrir `Examples/CroaKitDemo/CroaKitDemo.xcodeproj`, choisir le schéma **CroaKitDemo** et un simulateur iOS. L’onglet **Signature** présente le footer avec les métadonnées de la cible ; le réglage **Lien vers la communauté** permet d’afficher son lien facultatif et d’ouvrir la galerie en feuille. L’onglet **Communauté** conserve un accès dédié à `CroaKit.communityApps()`. Le sélecteur de thème permet de comparer Système, Étang, Papier et Sur mesure dans les deux onglets et dans la feuille.
 
 Les ressources graphiques et Metal doivent être compilées par Xcode / `xcodebuild`, qui produit le catalogue d’assets et `default.metallib` dans le bundle du package. Un `swift build` seul ne remplace pas cette compilation des ressources Apple.
 

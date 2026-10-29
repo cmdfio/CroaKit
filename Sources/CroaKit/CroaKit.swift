@@ -15,6 +15,9 @@ public enum CroaKit {
 
     /// Reads the host app's name, version and build unless explicitly provided.
     /// Add this directly to a SwiftUI `VStack`, `ScrollView` or about screen.
+    /// `showsCommunityLink` adds an optional catalogue link, hidden by default.
+    /// A dedicated link in the host app's navigation or settings is always preferred.
+    /// The catalogue inherits `theme`; `excludingAppStoreID` hides the host app from it.
     @MainActor
     public static func footer(
         firstName: String,
@@ -23,9 +26,12 @@ public enum CroaKit {
         build: String? = nil,
         frogWidth: CGFloat = 36.96,
         animationsEnabled: Bool = true,
-        theme: CroaTheme = .system
+        theme: CroaTheme = .system,
+        showsCommunityLink: Bool = false,
+        excludingAppStoreID: String? = nil
     ) -> CroaFooter {
         CroaFooter(firstName: firstName, appName: appName, version: version,
-                   build: build, frogWidth: frogWidth, animationsEnabled: animationsEnabled, theme: theme)
+                   build: build, frogWidth: frogWidth, animationsEnabled: animationsEnabled, theme: theme,
+                   showsCommunityLink: showsCommunityLink, excludingAppStoreID: excludingAppStoreID)
     }
 }
