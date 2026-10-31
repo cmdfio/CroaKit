@@ -1,5 +1,10 @@
 # Changements
 
+## 1.4.1
+
+- Le bloc d’ajout d’app est remplacé par une courte présentation du collectif, avec un lien vers **cmdf.io**.
+- Les conditions d’intégration et de validation restent dans la documentation.
+
 ## 1.4.0
 
 - Carte App Store native (`SKOverlay`) affichée automatiquement à l’ouverture d’une fiche sur iPhone et iPad pour installer l’app sans quitter la présentation.

@@ -26,7 +26,7 @@ La grenouille dans l’écran « À propos » de Seekzl. Cliquer sur l’aperçu
 
 ## Installation
 
-Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.4.0**, puis ajouter le produit **CroaKit** à la cible de l’app :
+Dans Xcode, choisir **File → Add Package Dependencies…**, coller cette URL, sélectionner **Up to Next Major Version** à partir de **1.4.1**, puis ajouter le produit **CroaKit** à la cible de l’app :
 
 ```text
 https://github.com/cmdfio/CroaKit.git
@@ -36,7 +36,7 @@ Dans un autre package Swift, ajouter la dépendance et le produit à sa cible :
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/cmdfio/CroaKit.git", from: "1.4.0")
+    .package(url: "https://github.com/cmdfio/CroaKit.git", from: "1.4.1")
 ],
 targets: [
     .target(
@@ -265,7 +265,7 @@ Pour un serveur de test compatible, injecter `CroaCommunityClient(baseURL:sessio
 
 La validation sur le site ne suffit pas : après vérification de l’intégration, le collectif active séparément **Afficher dans CroaKit** dans l’admin. Cette option est désactivée par défaut. L’app apparaît alors lors des prochaines actualisations, sous réserve du cache du service. La masquer dans CroaKit ne la retire pas du wall de cmdf.io.
 
-Le bouton **Ajouter mon application** de la galerie ouvre ce même formulaire. Les ajouts passent par cmdf.io : aucune modification du package ni pull request n’est nécessaire pour référencer une app.
+En bas de la galerie, une mention compacte présente le collectif et renvoie vers l’accueil de **cmdf.io** : « ⌘+F c'est le regroupement des développeurs Apple francophones. Retrouvez nous sur cmdf.io. » Pour proposer une app, utiliser le formulaire lié ci-dessus. Les ajouts passent par cmdf.io : aucune modification du package ni pull request n’est nécessaire pour référencer une app.
 
 ## La grenouille seule
 

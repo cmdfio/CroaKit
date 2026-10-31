@@ -27,7 +27,7 @@ public struct CroaCommunityApps: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     catalogue
-                    submission
+                    communityFooter
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
@@ -162,19 +162,13 @@ public struct CroaCommunityApps: View {
         .accessibilityAddTraits(model.tag == value ? .isSelected : [])
     }
 
-    private var submission: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Divider().padding(.bottom, 6)
-            Text("Votre app a sa place ici.").font(appearance.font.font(.headline))
-            Text("Intégrez CroaKit à votre app, puis proposez-la sur cmdf.io. Le collectif vérifie l’intégration avant d’activer son affichage ici.")
-                .font(appearance.font.font(.subheadline)).foregroundStyle(appearance.secondary)
-            Link(destination: CroaCommunityClient.submissionURL) {
-                Label("Ajouter mon application", systemImage: "plus")
-                    .font(appearance.font.font(.subheadline, weight: .semibold)).padding(.vertical, 8)
-            }
-            .accessibilityIdentifier("croakit.community.submit")
-        }
-        .fixedSize(horizontal: false, vertical: true)
+    private var communityFooter: some View {
+        Text("⌘+F c'est le regroupement des développeurs Apple francophones. Retrouvez nous sur [cmdf.io](https://cmdf.io).")
+            .font(appearance.font.font(.footnote))
+            .foregroundStyle(appearance.secondary)
+            .padding(.vertical, 8)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityIdentifier("croakit.community.about")
     }
 }
 
