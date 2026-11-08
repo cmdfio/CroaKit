@@ -2,7 +2,7 @@
 
 Des composants SwiftUI pour les apps des grenouilles francophiles : une signature personnalisable avec grenouille animée par Metal, et une galerie connectée au catalogue d’applications de [⌘+F](https://cmdf.io).
 
-**iOS 18+ · macOS 15+ · Swift 6 · aucune dépendance externe.**
+**iOS 18+ · macOS 15+ · visionOS 2+ · Swift 6 · aucune dépendance externe.**
 
 ## Aperçu dans Seekzl
 
