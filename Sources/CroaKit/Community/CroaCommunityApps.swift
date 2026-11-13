@@ -36,21 +36,26 @@ public struct CroaCommunityApps: View {
             }
             .modifier(CroaCatalogueBackground(appearance: appearance))
             .refreshable { await model.load() }
-            .navigationTitle("Les apps du collectif")
+            .navigationTitle(Text("Les apps du collectif", bundle: .module))
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $model.query, placement: .navigationBarDrawer(displayMode: .always), prompt: "App, développeur, catégorie…")
+            .searchable(text: $model.query, placement: .navigationBarDrawer(displayMode: .always),
+                        prompt: Text("App, développeur, catégorie…", bundle: .module))
             #else
-            .searchable(text: $model.query, prompt: "App, développeur, catégorie…")
+            .searchable(text: $model.query, prompt: Text("App, développeur, catégorie…", bundle: .module))
             #endif
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button { reloadID += 1 } label: { Label("Actualiser", systemImage: "arrow.clockwise") }
-                        .disabled(model.isLoading)
+                    Button { reloadID += 1 } label: {
+                        Label { Text("Actualiser", bundle: .module) } icon: { Image(systemName: "arrow.clockwise") }
+                    }
+                    .disabled(model.isLoading)
                 }
                 if isPresented {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Fermer", systemImage: "xmark") { dismiss() }
+                        Button { dismiss() } label: {
+                            Label { Text("Fermer", bundle: .module) } icon: { Image(systemName: "xmark") }
+                        }
                     }
                 }
             }
@@ -68,36 +73,54 @@ public struct CroaCommunityApps: View {
 
     @ViewBuilder private var catalogue: some View {
         if model.apps.isEmpty && model.isLoading {
-            ProgressView("Chargement des apps…").frame(maxWidth: .infinity).padding(.vertical, 40)
+            ProgressView { Text("Chargement des apps…", bundle: .module) }.frame(maxWidth: .infinity).padding(.vertical, 40)
         } else if model.apps.isEmpty && model.failed {
             ContentUnavailableView {
-                Label("Le catalogue est indisponible", systemImage: "wifi.exclamationmark")
+                Label { Text("Le catalogue est indisponible", bundle: .module) } icon: { Image(systemName: "wifi.exclamationmark") }
                     .font(appearance.font.font(.title2, weight: .bold))
             } description: {
-                Text("Vérifiez votre connexion ou retrouvez les apps sur cmdf.io.")
+                Text("Vérifiez votre connexion ou retrouvez les apps sur cmdf.io.", bundle: .module)
                     .font(appearance.font.font(.body)).foregroundStyle(appearance.secondary)
             } actions: {
-                Button("Réessayer") { reloadID += 1 }
+                Button { reloadID += 1 } label: { Text("Réessayer", bundle: .module) }
                     .foregroundStyle(appearance.textOnTint(in: environment))
                     .buttonStyle(.borderedProminent)
-                Link("Voir sur cmdf.io", destination: CroaCommunityClient.catalogueURL)
+                Link(destination: CroaCommunityClient.catalogueURL) { Text("Voir sur cmdf.io", bundle: .module) }
             }
         } else if model.hasLoaded {
             VStack(alignment: .leading, spacing: 12) {
                 if model.failed {
-                    Label("Actualisation indisponible. Les dernières apps chargées restent affichées.", systemImage: "wifi.exclamationmark")
-                        .font(appearance.font.font(.footnote)).foregroundStyle(appearance.secondary)
+                    Label {
+                        Text("Actualisation indisponible. Les dernières apps chargées restent affichées.", bundle: .module)
+                    } icon: {
+                        Image(systemName: "wifi.exclamationmark")
+                    }
+                    .font(appearance.font.font(.footnote)).foregroundStyle(appearance.secondary)
                 }
                 if !model.apps.isEmpty { filters }
                 if model.filteredApps.isEmpty {
                     ContentUnavailableView {
-                        Label(model.isFiltered ? "Aucune app ne correspond" : "Les premières apps arrivent", systemImage: "square.grid.2x2")
-                            .font(appearance.font.font(.title2, weight: .bold))
+                        Label {
+                            if model.isFiltered {
+                                Text("Aucune app ne correspond", bundle: .module)
+                            } else {
+                                Text("Les premières apps arrivent", bundle: .module)
+                            }
+                        } icon: {
+                            Image(systemName: "square.grid.2x2")
+                        }
+                        .font(appearance.font.font(.title2, weight: .bold))
                     } description: {
-                        Text(model.isFiltered ? "Essayez un autre nom ou une autre catégorie." : "Proposez votre application à la communauté.")
-                            .font(appearance.font.font(.body)).foregroundStyle(appearance.secondary)
+                        Group {
+                            if model.isFiltered {
+                                Text("Essayez un autre nom ou une autre catégorie.", bundle: .module)
+                            } else {
+                                Text("Proposez votre application à la communauté.", bundle: .module)
+                            }
+                        }
+                        .font(appearance.font.font(.body)).foregroundStyle(appearance.secondary)
                     } actions: {
-                        if model.isFiltered { Button("Tout effacer") { model.resetFilters() } }
+                        if model.isFiltered { Button { model.resetFilters() } label: { Text("Tout effacer", bundle: .module) } }
                     }
                 } else {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 280), spacing: 12)], spacing: 12) {
@@ -122,38 +145,55 @@ public struct CroaCommunityApps: View {
                 HStack(spacing: 10) {
                     CroaFrog(width: 26)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Communauté ⌘+F")
+                        Text("Communauté ⌘+F", bundle: .module)
                             .font(appearance.font.font(.caption, weight: .semibold)).foregroundStyle(accent)
-                        Text("\(model.filteredApps.count) app\(model.filteredApps.count == 1 ? "" : "s")")
+                        Text("\(model.filteredApps.count) apps", bundle: .module)
                             .font(appearance.font.font(.caption)).foregroundStyle(appearance.secondary)
                     }
                     .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Menu {
-                    Picker("Catégorie", selection: $model.category) {
-                        Text("Toutes les catégories").tag("")
-                        ForEach(model.categories, id: \.self) { Text($0).tag($0) }
+                    Picker(selection: $model.category) {
+                        Text("Toutes les catégories", bundle: .module).tag("")
+                        ForEach(model.categories, id: \.self) { Text(verbatim: $0).tag($0) }
+                    } label: {
+                        Text("Catégorie", bundle: .module)
                     }
                 } label: {
-                    Label(model.category.isEmpty ? "Catégories" : model.category, systemImage: "line.3.horizontal.decrease")
-                        .font(appearance.font.font(.subheadline)).padding(.vertical, 8)
+                    Label {
+                        if model.category.isEmpty {
+                            Text("Catégories", bundle: .module)
+                        } else {
+                            Text(verbatim: model.category)
+                        }
+                    } icon: {
+                        Image(systemName: "line.3.horizontal.decrease")
+                    }
+                    .font(appearance.font.font(.subheadline)).padding(.vertical, 8)
                 }
             }
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    tagButton("Toutes", value: "")
-                    if model.apps.contains(where: { $0.tags.contains("duo") }) { tagButton("Compatible Duo", value: "duo") }
-                    if model.apps.contains(where: { $0.tags.contains("build-challenge") }) { tagButton("Build Challenge", value: "build-challenge") }
-                    if model.apps.contains(where: { $0.tags.contains("founder") }) { tagButton("Fondateurs", value: "founder") }
+                    tagButton(Text("Toutes", bundle: .module), value: "")
+                    if model.apps.contains(where: { $0.tags.contains("duo") }) {
+                        tagButton(Text("Compatible Duo", bundle: .module), value: "duo")
+                    }
+                    // The Build Challenge keeps its name in every language.
+                    if model.apps.contains(where: { $0.tags.contains("build-challenge") }) {
+                        tagButton(Text(verbatim: "Build Challenge"), value: "build-challenge")
+                    }
+                    if model.apps.contains(where: { $0.tags.contains("founder") }) {
+                        tagButton(Text("Fondateurs", bundle: .module), value: "founder")
+                    }
                 }
             }
         }
     }
 
-    private func tagButton(_ title: String, value: String) -> some View {
+    private func tagButton(_ title: Text, value: String) -> some View {
         Button { model.tag = value } label: {
-            Text(verbatim: title).font(appearance.font.font(.subheadline, weight: .medium))
+            title.font(appearance.font.font(.subheadline, weight: .medium))
                 .padding(.horizontal, 14).frame(minHeight: 44)
                 .foregroundStyle(model.tag == value ? accent : appearance.secondary)
                 .background(model.tag == value ? accent.opacity(0.12) : appearance.surface, in: Capsule())
@@ -163,7 +203,8 @@ public struct CroaCommunityApps: View {
     }
 
     private var communityFooter: some View {
-        Text("⌘+F c'est le regroupement des développeurs Apple francophones. Retrouvez nous sur [cmdf.io](https://cmdf.io).")
+        Text("⌘+F c'est le regroupement des développeurs Apple francophones. Retrouvez nous sur [cmdf.io](https://cmdf.io).",
+             bundle: .module)
             .font(appearance.font.font(.footnote))
             .foregroundStyle(appearance.secondary)
             .padding(.vertical, 8)

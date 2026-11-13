@@ -122,6 +122,16 @@ CroaKit.footer(
 
 `excludingAppStoreID` est l’identifiant numérique de la fiche App Store de l’app. Il ne s’applique qu’à la galerie ouverte depuis ce footer ; il ne change pas la signature.
 
+## Langues
+
+CroaKit s’affiche dans la langue de l’app hôte. Ses textes sont écrits en français et traduits en allemand, anglais, arabe, chinois simplifié, coréen, espagnol, italien, japonais et portugais du Brésil : la signature, la galerie, les fiches, les catégories de l’App Store et les libellés VoiceOver. Le nom du collectif, les Grenouilles Francophiles, reste en français dans toutes les langues.
+
+Aucun réglage n’est nécessaire : le catalogue de chaînes (`Localizable.xcstrings`) est dans le bundle du package, et l’app hôte n’a rien à traduire. Comme pour tout package, la langue retenue est celle dans laquelle l’app tourne, parmi celles que son projet déclare.
+
+> **Une app en français dont le projet ne déclare que l’anglais** (la région de développement par défaut d’Xcode) affichait CroaKit en français ; elle l’affiche désormais en anglais. Déclarer le français dans le projet, comme région de développement ou comme localisation, rend la signature en français.
+
+Les présentations, les mots de l’équipe et les prix des fiches viennent de cmdf.io et de l’App Store, dans la langue où ils sont servis.
+
 ## Personnaliser l’apparence
 
 Le paramètre `theme` est commun à la signature et à la galerie. Le même thème est automatiquement appliqué aux fiches d’apps :
@@ -291,7 +301,7 @@ Depuis la racine du package :
 xcodebuild -scheme CroaKit -destination 'platform=macOS' test
 ```
 
-Les tests vérifient les métadonnées, les illustrations, la bibliothèque Metal, les raccords du visage et le contrat réseau du catalogue : erreurs HTTP, réponses invalides, filtrage, doublons, liens et conservation des données après un échec d’actualisation. La démo permet de contrôler le rendu et les interactions sur simulateur.
+Les tests vérifient les métadonnées, les illustrations, la bibliothèque Metal, les raccords du visage, la présence de chaque chaîne dans chaque langue et le contrat réseau du catalogue : erreurs HTTP, réponses invalides, filtrage, doublons, liens et conservation des données après un échec d’actualisation. La démo permet de contrôler le rendu et les interactions sur simulateur.
 
 ## Contenu
 
@@ -300,6 +310,7 @@ Les tests vérifient les métadonnées, les illustrations, la bibliothèque Meta
 - `Animation/` : interpolation des formes et mouvements SwiftUI.
 - `Community/` : galerie SwiftUI, fiches, modèles et client du catalogue cmdf.io.
 - `Resources/Art.xcassets` : illustrations vectorielles.
+- `Resources/Localizable.xcstrings` : les textes, en français, et leurs traductions.
 - `Resources/CroaFrog.metal` : respiration, inclinaison, trajectoire et réception du saut.
 - `Resources/francophile-frog-jump.json` : poses et raccords du saut ; contour extérieur de 14 unités sur le dessin de référence, sans trait à la jonction verte/crème du visage.
 

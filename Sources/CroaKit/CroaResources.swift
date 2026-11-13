@@ -1,6 +1,8 @@
 import Foundation
 
-/// All artwork and the compiled Metal library belong to the package bundle.
+/// All artwork, the compiled Metal library and the string catalog belong to the package bundle.
+/// SwiftUI reads a string literal from the host app's catalog unless it is given this bundle:
+/// every visible string is a `Text("…", bundle: .module)` or a `String(localized:bundle:)`.
 enum CroaResources {
     static let bundle = Bundle.module
 }
@@ -18,7 +20,9 @@ struct CroaAppInfo: Sendable {
         }
         self.appName = nonempty(appName)
             ?? nonempty(bundleValue("CFBundleDisplayName"))
-            ?? nonempty(bundleValue("CFBundleName")) ?? "cette app"
+            ?? nonempty(bundleValue("CFBundleName"))
+            ?? String(localized: "cette app", bundle: .module,
+                      comment: "Stands for the app's name in “Merci d’utiliser %@” when the host app has none")
         self.version = nonempty(version) ?? nonempty(bundleValue("CFBundleShortVersionString")) ?? "—"
         self.build = nonempty(build) ?? nonempty(bundleValue("CFBundleVersion")) ?? "—"
     }

@@ -58,11 +58,11 @@ public struct CroaFrog: View {
         )
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
-        .accessibilityLabel("Grenouille Francophile")
-        .accessibilityHint("Touchez pour un clin d’œil. Maintenez pour un saut.")
+        .accessibilityLabel(Text("Grenouille Francophile", bundle: .module))
+        .accessibilityHint(Text("Touchez pour un clin d’œil. Maintenez pour un saut.", bundle: .module))
         .accessibilityIdentifier("croakit.frog")
         .accessibilityAction { wink() }
-        .accessibilityAction(named: Text("Faire un saut")) { requestJump() }
+        .accessibilityAction(named: Text("Faire un saut", bundle: .module)) { requestJump() }
         // Reserve the flight above the original layout, including outside a
         // ScrollView. Appearing on screen must enable a standalone mascot too.
         .padding(.top, artworkWidth * 0.32)
