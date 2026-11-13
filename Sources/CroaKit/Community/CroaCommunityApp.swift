@@ -53,19 +53,40 @@ public struct CroaCommunityApp: Decodable, Identifiable, Hashable, Sendable {
         return url
     }
 
-    var category: String {
-        let translations = [
-            "Games": "Jeux", "Productivity": "Productivité", "Developer Tools": "Développement",
-            "Utilities": "Utilitaires", "Lifestyle": "Style de vie", "Entertainment": "Divertissement",
-            "Health & Fitness": "Forme et santé", "Medical": "Médecine", "Education": "Éducation",
-            "Travel": "Voyages", "Reference": "Références", "Business": "Économie et entreprise",
-            "Finance": "Finance", "Music": "Musique", "Photo & Video": "Photo et vidéo",
-            "Graphics & Design": "Graphisme et design", "Social Networking": "Réseaux sociaux",
-            "Food & Drink": "Cuisine", "Navigation": "Navigation", "News": "Actualités",
-            "Shopping": "Shopping", "Sports": "Sports", "Weather": "Météo", "Books": "Livres"
-        ]
-        guard let genre, !genre.isEmpty else { return "Autres" }
-        return translations[genre] ?? genre
+    /// The App Store genre, which the service gives in English, in the host app's language.
+    var category: String { Self.category(for: genre, in: CroaResources.bundle) }
+
+    /// `bundle` is the package's, or one of its `.lproj` folders to read a given language.
+    /// A genre the catalog does not know keeps the service's name.
+    static func category(for genre: String?, in bundle: Bundle) -> String {
+        switch genre {
+        case nil, "": String(localized: "Autres", bundle: bundle, comment: "Category of an app without an App Store genre")
+        case "Games": String(localized: "Jeux", bundle: bundle, comment: "App Store category: Games")
+        case "Productivity": String(localized: "Productivité", bundle: bundle, comment: "App Store category: Productivity")
+        case "Developer Tools": String(localized: "Développement", bundle: bundle, comment: "App Store category: Developer Tools")
+        case "Utilities": String(localized: "Utilitaires", bundle: bundle, comment: "App Store category: Utilities")
+        case "Lifestyle": String(localized: "Style de vie", bundle: bundle, comment: "App Store category: Lifestyle")
+        case "Entertainment": String(localized: "Divertissement", bundle: bundle, comment: "App Store category: Entertainment")
+        case "Health & Fitness": String(localized: "Forme et santé", bundle: bundle, comment: "App Store category: Health & Fitness")
+        case "Medical": String(localized: "Médecine", bundle: bundle, comment: "App Store category: Medical")
+        case "Education": String(localized: "Éducation", bundle: bundle, comment: "App Store category: Education")
+        case "Travel": String(localized: "Voyages", bundle: bundle, comment: "App Store category: Travel")
+        case "Reference": String(localized: "Références", bundle: bundle, comment: "App Store category: Reference")
+        case "Business": String(localized: "Économie et entreprise", bundle: bundle, comment: "App Store category: Business")
+        case "Finance": String(localized: "Finance", bundle: bundle, comment: "App Store category: Finance")
+        case "Music": String(localized: "Musique", bundle: bundle, comment: "App Store category: Music")
+        case "Photo & Video": String(localized: "Photo et vidéo", bundle: bundle, comment: "App Store category: Photo & Video")
+        case "Graphics & Design": String(localized: "Graphisme et design", bundle: bundle, comment: "App Store category: Graphics & Design")
+        case "Social Networking": String(localized: "Réseaux sociaux", bundle: bundle, comment: "App Store category: Social Networking")
+        case "Food & Drink": String(localized: "Cuisine", bundle: bundle, comment: "App Store category: Food & Drink")
+        case "Navigation": String(localized: "Navigation", bundle: bundle, comment: "App Store category: Navigation")
+        case "News": String(localized: "Actualités", bundle: bundle, comment: "App Store category: News")
+        case "Shopping": String(localized: "Shopping", bundle: bundle, comment: "App Store category: Shopping")
+        case "Sports": String(localized: "Sports", bundle: bundle, comment: "App Store category: Sports")
+        case "Weather": String(localized: "Météo", bundle: bundle, comment: "App Store category: Weather")
+        case "Books": String(localized: "Livres", bundle: bundle, comment: "App Store category: Books")
+        case let genre?: genre
+        }
     }
 
     func matches(_ query: String) -> Bool {

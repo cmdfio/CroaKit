@@ -38,23 +38,27 @@ public struct CroaFooter: View {
 
     private var appearance: CroaResolvedTheme { theme.resolve(in: colorScheme) }
 
+    private var credit: Text {
+        firstName.isEmpty
+            ? Text("Conçu par un membre des grenouilles francophiles.", bundle: .module)
+            : Text("Conçu par \(firstName), un membre des grenouilles francophiles.", bundle: .module)
+    }
+
     public var body: some View {
         VStack(spacing: 8) {
-            Text(verbatim: "Merci d’utiliser \(info.appName)")
+            Text("Merci d’utiliser \(info.appName)", bundle: .module)
                 .font(appearance.font.font(.subheadline, weight: .medium))
-            Text(verbatim: firstName.isEmpty
-                 ? "Conçu par un membre des grenouilles francophiles."
-                 : "Conçu par \(firstName), un membre des grenouilles francophiles.")
+            credit
                 .font(appearance.font.font(.footnote))
                 .foregroundStyle(appearance.secondary)
             CroaFrog(width: frogWidth, animationsEnabled: animationsEnabled)
-            Text(verbatim: "Version \(info.version) (\(info.build))")
+            Text("Version \(info.version) (\(info.build))", bundle: .module)
                 .font(appearance.font.font(.caption))
                 .foregroundStyle(appearance.secondary)
             if showsCommunityLink {
                 Button { isCommunityPresented = true } label: {
                     HStack(spacing: 4) {
-                        Text("Les apps du collectif")
+                        Text("Les apps du collectif", bundle: .module)
                         Image(systemName: "chevron.right")
                             .accessibilityHidden(true)
                     }
@@ -64,7 +68,7 @@ public struct CroaFooter: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .accessibilityHint("Ouvre le catalogue des apps de la communauté")
+                .accessibilityHint(Text("Ouvre le catalogue des apps de la communauté", bundle: .module))
                 .accessibilityIdentifier("croakit.footer.community")
             }
         }
