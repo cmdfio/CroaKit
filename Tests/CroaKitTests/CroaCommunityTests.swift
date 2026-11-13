@@ -143,7 +143,8 @@ struct CroaCommunityTests {
         #expect(model.hasLoaded && !model.failed && !model.isLoading)
         model.query = "cafe ELODIE"
         #expect(model.filteredApps.map(\.slug) == ["cafe"])
-        model.category = "Jeux"
+        // A category is named in the language the tests run in.
+        model.category = CroaCommunityApp.category(for: "Games", in: CroaResources.bundle)
         #expect(model.filteredApps.isEmpty)
         model.resetFilters()
         model.tag = "duo"
@@ -161,6 +162,6 @@ struct CroaCommunityTests {
         let model = CroaCommunityModel(client: makeClient(), excludingAppStoreID: "123")
         await model.load()
         #expect(model.apps.map(\.appStoreID) == ["456"])
-        #expect(model.categories == ["Jeux"])
+        #expect(model.categories == [CroaCommunityApp.category(for: "Games", in: CroaResources.bundle)])
     }
 }
